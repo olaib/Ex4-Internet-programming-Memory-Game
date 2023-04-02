@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <title>Ex4</title>
+
+</head>
+
+<body>
+    <!-- modals -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="leaderboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="leaderboardModalLabel">Leaderboard</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="high-scores-modal-empty-msg">
+                        No high scores yet!
+                    </div>
+                    <div id="high-scores-modal-table" class="d-none">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid row d-flex justify-content-center">
+       <div class="col-xl-8">
+            <div class="row bg-light">
+                    <h1>Memory Game</h1>
+                    <p>Click on the cards to flip them and find the <br>
+                        matching pairs with as little flips as possible</p>
+            </div>
+
+           <!-- Name field -->
+           <div class="row" id="forms-page">
+               <form id="messageForm" class="was-validated">
+                   <div class="col-xl-8 my-3 mb-3">
+                       <label for="fname">Your Name:</label><br>
+                       <input type="text" class="form-control w-100" id="fname"  title="Please fill out this field."
+                              pattern="[0-9A-Za-z]{3,12}" placeholder="Your name including letters and digits only" required/>
+                       <div class="invalid-feedback">Name must be at between 3 and 12 characters.</div>
+                   </div>
+               </form>
+
+               <!-- Buttons -->
+               <div class="row">
+                       <input type="submit" class="btn btn-primary col me-2" id="playBtn" form="messageForm" value="Play">
+                       <button class="btn btn-light col me-2" id="settings" data-bs-toggle="collapse" data-bs-target="#settingsForm">Settings</button>
+                       <button class="btn btn-light col me-2" id="highScoreBtn" data-bs-toggle="modal" data-bs-target="#modal">High Scores</button>
+                   </div>
+               <!-- setting form -->
+               <form class="row collapse" id="settingsForm">
+                   <div class="col-xl-8">
+                       <div class="row">
+                           <div class="col-sm-12 col-md-6">
+                               <div class="row">
+                                   <div class="col-12">
+                                       <br>
+                                       <label for="numOfRows" class="form-label">Number of rows:</label>
+                                       <select class="form-select" id="numOfRows" aria-label="Floating label select example">
+                                           <option value="2" selected>2</option>
+                                           <option value="3">3</option>
+                                           <option value="4">4</option>
+                                           <option value="5">5</option>
+                                       </select>
+                                   </div>
+                                   <div class="col-12 text-danger d-none" id="rowsErrorMessage">
+                                       Number of cards (rows X colums) must be even, please correct your choice.
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="col-sm-12 col-md-6">
+                               <div class="row">
+                                   <div class="col">
+                                       <br>
+                                       <label for="numOfCols" class="form-label">Number of columns:</label>
+                                       <select class="form-select" id="numOfCols" aria-label="Floating label select example">
+                                           <option value="2 selected">2</option>
+                                           <option value="3">3</option>
+                                           <option value="4">4</option>
+                                           <option value="5">5</option>
+                                       </select>
+                                   </div>
+                                   <div class="col-12 text-danger d-none" id="colsErrorMessage">
+                                       Number of cards (rows X colums) must be even, please correct your choice.
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <label for="delay" class="form-label">Delay (in seconds):</label>
+                               <select class="form-select" id="delay" aria-label="Floating label select example">
+                                   <option value="0.5">0.5</option>
+                                   <option value="1" selected>1</option>
+                                   <option value="1.5  ">1.5</option>
+                                   <option value="2">2</option>
+                               </select>
+                           </div>
+                       </div>
+                   </div>
+               </form>
+               </div>
+
+            <!-- game window -->
+            <div class="d-none" id="game">
+                <p>Steps: <span id="steps"></span></p>
+                <table id="cards-grid">
+                </table><br>
+                <div class="row">
+                    <button class="col-xl-2 col-3 btn btn-primary " id="abandonBtn">Abandon</button>
+                </div>
+            </div>
+            <div class="col-8 d-none" id="game-over">
+                <h1 class="row">Game Over!</h1>
+                <p calss="row">Number of cards played: <span id="num-of-cards"></span></p>
+                <p id="status" class="row"></p>
+                <table class="table table-striped" id="high-scores-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="high-scores-data">
+                    </tbody>
+                </table><br>
+                <div class="row">
+                    <button class="col-1 btn btn-primary" id="ok">Ok</button>
+                </div>
+            </div>
+       </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+            crossorigin="anonymous"></script>
+    <script src="js/function.js"></script>
+
+</body>
+</html>
